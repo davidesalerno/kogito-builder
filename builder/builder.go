@@ -169,7 +169,6 @@ func (b *builder) Reconcile() (*api.Build, error) {
 				target = newTarget
 			}
 
-			break
 		}
 	}
 
