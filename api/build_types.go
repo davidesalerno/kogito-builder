@@ -7,9 +7,9 @@ import (
 
 // Build is the Schema for the builder API. Follows the Kubernetes resource structure, but it's not tied to it. Can be used in any environment.
 type Build struct {
-	ObjectReference
-	Spec   BuildSpec   `json:"spec,omitempty"`
-	Status BuildStatus `json:"status,omitempty"`
+	ObjectReference `json:"meta,omitempty"`
+	Spec            BuildSpec   `json:"spec,omitempty"`
+	Status          BuildStatus `json:"status,omitempty"`
 }
 
 // BuildStrategy specifies how the Build should be executed.

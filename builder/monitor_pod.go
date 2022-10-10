@@ -3,6 +3,8 @@ package builder
 import (
 	"context"
 	"encoding/json"
+	"github.com/hashicorp/go-version"
+	"github.com/ricardozanini/kogito-builder/util/defaults"
 	"os"
 	"time"
 
@@ -75,10 +77,15 @@ func (action *monitorPodAction) Handle(ctx context.Context, build *api.Build) (*
 			if err = action.addTimeoutAnnotation(ctx, pod, metav1.Now()); err != nil {
 				return nil, err
 			}
+			// In latest Kaniko versions kill is no more available in image's $PATH, do we still need it?
 			// Send SIGTERM signal to running containers
-			if err = action.sigterm(pod); err != nil {
-				// Requeue
-				return nil, err
+			current, err := version.NewVersion(defaults.KanikoVersion)
+			maxVersionSupportingKill, err := version.NewVersion(defaults.KanikoVersionSupportingKill)
+			if current.LessThanOrEqual(maxVersionSupportingKill) {
+				if err = action.sigterm(pod); err != nil {
+					// Requeue
+					return nil, err
+				}
 			}
 		}
 
