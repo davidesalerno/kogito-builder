@@ -63,6 +63,8 @@ func addKanikoTaskToPod(ctx context.Context, c client.Client, build *api.Build, 
 		"--dockerfile=Dockerfile",
 		"--context=dir://" + task.ContextDir,
 		"--destination=" + task.Registry.Address + "/" + task.Image,
+		"--cache=true",
+		"--cache-ttl=1h",
 	}
 
 	if task.Verbose != nil && *task.Verbose {
